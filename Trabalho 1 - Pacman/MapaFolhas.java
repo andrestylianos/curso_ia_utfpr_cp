@@ -1,7 +1,7 @@
 package player;
 
 import java.util.HashMap;
-import java.util.List;
+
 
 public class MapaFolhas {
 	HashMap <Node,Double> mapavalores = new HashMap<Node,Double>();
