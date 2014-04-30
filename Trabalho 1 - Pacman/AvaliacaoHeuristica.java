@@ -3,11 +3,20 @@ package player;
 import java.util.Collection;
 import java.util.List;
 
+import pacman.Game;
 import pacman.Location;
 import pacman.LocationSet;
+import pacman.Move;
+import pacman.State;
+
+// Classe que contém as heuristicas
+
+
 
 public class AvaliacaoHeuristica {
-	
+
+	// Calcula a distancia euclideana entre o pacman e o fantasma mais próximo.
+	// Quanto maior melhor
 	public double closestEuclideanGhost(Location pacManLocation, List<Location> ghostLocations){
 		double minDistance = Double.POSITIVE_INFINITY;
 		if(10<Location.euclideanDistanceToClosest(pacManLocation, ghostLocations)){
@@ -18,6 +27,8 @@ public class AvaliacaoHeuristica {
 		return minDistance;
 	}
 
+	// Calcula a distancia de manhattan entre o pacman e o fantasma mais próximo.
+	// Quanto maior melhor
 	public double closestManhattanGhost(Location pacManLocation, List<Location> ghostLocations){
 		double minDistance  = Double.POSITIVE_INFINITY;
 		if(10<Location.manhattanDistanceToClosest(pacManLocation, ghostLocations)){
@@ -28,6 +39,8 @@ public class AvaliacaoHeuristica {
 		return minDistance;
 	}
 
+	// Calcula a distancia euclidiana média entre o pacman e todos os fantasmas.
+	// Quanto maior melhor
 	public double averageEuclideanGhost(Location pacManLocation, List<Location> ghostLocations){
 		double i=0, average = 0, sum = 0;
 		for(Location l: ghostLocations){
@@ -38,6 +51,8 @@ public class AvaliacaoHeuristica {
 		return average;
 	}
 
+	// Calcula a distancia de manhattan média entre o pacman e todos os fantasmas.
+	// Quanto maior melhor
 	public double averageManhattanGhost(Location pacManLocation, List<Location> ghostLocations){
 		double i=0, average = 0, sum = 0;
 		for(Location l: ghostLocations){
@@ -48,12 +63,25 @@ public class AvaliacaoHeuristica {
 		return average;
 	}
 
-	public double numberDots(LocationSet dot){
-		return -dot.size();
+	// Varia o peso atribuido para a heuristica da distancia euclideana entre o pacman e o segundo fantasma mais próximo
+	// com base em pequenas ou grandes distancias.
+	public double secondEuclideanGhost(Location pacManLocation,List<Location> ghostLocations){
+		double value;
+		double secondClosest = getSecondClosestEuclDis(pacManLocation,
+				ghostLocations);
+		if(secondClosest<10){
+			value=1.5*secondClosest;
+		}else{
+			value=0.5*secondClosest;
+		}
+		return value;
 	}
 
-	public double secondEuclideanGhost(Location pacManLocation,List<Location> ghostLocations){
-		double value = 0, closest = 0, secondClosest=Double.POSITIVE_INFINITY, i=0;
+	// Calcula a distancia euclideana entre o pacman e o segundo fantasma mais próximo.
+	// Quanto maior melhor
+	private double getSecondClosestEuclDis(Location pacManLocation,
+			List<Location> ghostLocations) {
+		double closest = 0, secondClosest=Double.POSITIVE_INFINITY, i=0;
 		closest = Location.euclideanDistanceToClosest(pacManLocation, ghostLocations);
 		for(Location l: ghostLocations){
 			if((closest==Location.euclideanDistance(pacManLocation, l))&&(i==0)){
@@ -64,16 +92,28 @@ public class AvaliacaoHeuristica {
 				secondClosest=Location.euclideanDistance(pacManLocation, l);
 			}
 		}
-		if(secondClosest<10){
-			value=0.05*secondClosest;
+		return secondClosest;
+	}
+
+	// Varia o peso atribuido para a heuristica da distancia de manhattan entre o pacman e o segundo fantasma mais próximo
+	// com base em pequenas ou grandes distancias.
+	public double secondManhattanGhost(Location pacManLocation,List<Location> ghostLocations){
+		double value;
+		double secondClosest = getSecondClosestManhGhostDis(pacManLocation,
+				ghostLocations);
+		if(secondClosest<14){
+			value=2*secondClosest;
 		}else{
-			value=1.5*secondClosest;
+			value=0.3*secondClosest;
 		}
 		return value;
 	}
 
-	public double secondManhattanGhost(Location pacManLocation,List<Location> ghostLocations){
-		double value = 0, closest = 0, secondClosest=Double.POSITIVE_INFINITY, i=0;
+	// Calcula a distancia de manhattan entre o pacman e o segundo fantasma mais próximo.
+	// Quanto maior melhor
+	private double getSecondClosestManhGhostDis(Location pacManLocation,
+			List<Location> ghostLocations) {
+		double closest = 0, secondClosest=Double.POSITIVE_INFINITY, i=0;
 		closest = Location.manhattanDistanceToClosest(pacManLocation, ghostLocations);
 		for(Location l: ghostLocations){
 			if((closest==Location.manhattanDistance(pacManLocation, l))&&(i==0)){
@@ -84,14 +124,17 @@ public class AvaliacaoHeuristica {
 				secondClosest=Location.manhattanDistance(pacManLocation, l);
 			}
 		}
-		if(secondClosest<10){
-			value=0.1*secondClosest;
-		}else{
-			value=2*secondClosest;
-		}
-		return value;
+		return secondClosest;
 	}
 
+	// Contabiliza o numero de pontos restantes no tabuleiro.
+	// Quanto menor melhor
+	public double numberDots(LocationSet dot){
+		return -dot.size();
+	}
+
+	// Calcula a distancia euclideana media entre o pacman e os pontos.
+	// Quanto menor melhor
 	public double averageEuclideanDot(Location pacManLocation, Collection<Location> dotLocations){
 		double i=0, average = 0, sum = 0;
 		for(Location l: dotLocations){
@@ -102,6 +145,8 @@ public class AvaliacaoHeuristica {
 		return -average;
 	}
 
+	// Calcula a distancia de manhattan media entre o pacman e os pontos.
+	// Quanto menor melhor
 	public double averageManhattanDot(Location pacManLocation, Collection<Location> dotLocations){
 		double i=0, average = 0, sum = 0;
 		for(Location l: dotLocations){
@@ -112,11 +157,23 @@ public class AvaliacaoHeuristica {
 		return -average;
 	}
 
+	// Calcula a distancia euclideana entre o pacman e o ponto mais próximo.
+	// Quanto menor melhor
+	public double closestDotEuclidean(Location pacmanlocation, Collection<Location> dotlocations){
+		return -Location.euclideanDistanceToClosest(pacmanlocation, dotlocations);
+	}
+
+	// Calcula a distancia de manhattan entre o pacman e o ponto mais próximo.
+	// Quanto menor melhor
 	public double closestDotManhattan(Location pacmanlocation, Collection<Location> dotlocations){
 		return -Location.manhattanDistanceToClosest(pacmanlocation, dotlocations);
 	}
 
-	public double closestDotEuclidean(Location pacmanlocation, Collection<Location> dotlocations){
-		return -Location.euclideanDistanceToClosest(pacmanlocation, dotlocations);
+	// Calcula a heuristica do ultimo estado caso o pacman continuasse em linha reta até encontrar uma parede.
+	public double keepStraight(State state,Move pacmanmove, DFSPacManPlayer player){
+		List<State> projectedstate = Game.getProjectedStates(state, pacmanmove);
+		double value=0;
+		value = player.evaluateState(projectedstate.get(projectedstate.size()-1));
+		return value;
 	}
 }
