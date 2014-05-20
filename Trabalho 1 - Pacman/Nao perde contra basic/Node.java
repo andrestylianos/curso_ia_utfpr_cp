@@ -73,7 +73,7 @@ public class Node {
 		this.heuristica-=this.penalidade;
 		// Adiciona o custo do caminho na busca A*
 		if(DFSPacManPlayer.Aestrela){
-			this.heuristica-=profundidade*3;
+			this.heuristica-=profundidade*50;
 		}
 		// Caso o estado inicial seja uma bifurcação insere o valor das heuristicas projetadas no calculo da heuristica final
 		if(this.heuristicaprojetada!=0){
@@ -99,7 +99,7 @@ public class Node {
 		AvaliacaoHeuristica avalia = new AvaliacaoHeuristica();
 		// Caso o primeiro estado não for uma bifurcação, define bifurcacao como false
 		if((movimentos.size()<=2)&&(this.profundidade==0)){
-			bifurcacao=false;
+//			bifurcacao=false;
 		}
 		// Loop para criação de filhos
 		for(Move m : movimentos){

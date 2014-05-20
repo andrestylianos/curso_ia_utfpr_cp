@@ -15,7 +15,7 @@ public class Node {
 	State estadoatual; // Estado atual do nó
 	double heuristica = 0; // Valor da heuristica
 	int profundidade=0; // Profundidade do nó
-	int penalidade=0; // Penalidade para evitar que o pacman realize um movimento oposto ao anterior
+	double penalidade=0; // Penalidade para evitar que o pacman realize um movimento oposto ao anterior
 	double heuristicaprojetada=0; // Valor de heuristica para projeçoes recursivas caso o pacman encontre uma bifurcação
 
 	// Metódo construtor para nó vazio
@@ -73,11 +73,11 @@ public class Node {
 		this.heuristica-=this.penalidade;
 		// Adiciona o custo do caminho na busca A*
 		if(DFSPacManPlayer.Aestrela){
-			this.heuristica-=profundidade*3;
+			this.heuristica-=profundidade*10;
 		}
 		// Caso o estado inicial seja uma bifurcação insere o valor das heuristicas projetadas no calculo da heuristica final
 		if(this.heuristicaprojetada!=0){
-			this.heuristica+=this.heuristicaprojetada*0.8;
+			this.heuristica+=this.heuristicaprojetada*0.5;
 		}
 
 	}
@@ -86,9 +86,9 @@ public class Node {
 	private void loopPenalty(int profundidade, Move pacManMove,
 			DFSPacManPlayer player) {
 		if((profundidade==1)&&(pacManMove.getOpposite()==player.getLastmove())){
-			this.penalidade=this.raiz.penalidade+50;
+			this.penalidade=Double.POSITIVE_INFINITY;
 		}else if(pacManMove.getOpposite()==this.raiz.movimentorealizado){
-			this.penalidade=this.raiz.penalidade+50;
+			this.penalidade=this.raiz.penalidade+1000000;
 		}
 	}
 
@@ -105,7 +105,7 @@ public class Node {
 		for(Move m : movimentos){
 			Node proximoestado = new Node();
 			if(bifurcacao){
-				if(this.profundidade==1){
+				if(this.profundidade==0){
 					// Realiza o calculo da heuristica projetada pois existe uma bifurcacao no nó de profundidade 1
 					this.heuristicaprojetada=avalia.keepStraight(state, m, player);
 				}

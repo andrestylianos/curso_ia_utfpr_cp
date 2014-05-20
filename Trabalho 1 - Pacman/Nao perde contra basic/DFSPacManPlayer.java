@@ -30,30 +30,30 @@ public class DFSPacManPlayer implements PacManPlayer, StateEvaluator {
 		double value = 0; 
 		if(Game.isFinal(state)){
 			if(Game.isWinning(state)){
-				return 100000;
+				return 10000000;
 			}
 			if (Game.isLosing(state)){
-				return -100000000;
+				return -1000000;
 			}
 		}
 		Location pacmanlocal = state.getPacManLocation();
 		List<Location> ghostlocal = state.getGhostLocations();
 		LocationSet dots = state.getDotLocations();
 		AvaliacaoHeuristica avalia = new AvaliacaoHeuristica();
-		value+= (avalia.closestEuclideanGhost(pacmanlocal, ghostlocal)*6);
-		value+= (avalia.closestManhattanGhost(pacmanlocal, ghostlocal)*10);
-		//value+= (avalia.averageEuclideanGhost(pacmanlocal, ghostlocal)*1);
-	//	value+= (avalia.averageManhattanGhost(pacmanlocal, ghostlocal)*1);   
-		value+= (avalia.numberDots(dots)*6);
-		value+= (avalia.secondEuclideanGhost(pacmanlocal, ghostlocal)*4);
-		value+= (avalia.secondManhattanGhost(pacmanlocal, ghostlocal)*6);
-		value+= (avalia.averageEuclideanDot(pacmanlocal, dots)*2);
-	//	value+= (avalia.averageManhattanDot(pacmanlocal, dots)*0.5);
-		value+= (avalia.thirdEuclideanGhost(pacmanlocal, ghostlocal)*2);
-		value+= (avalia.thirdManhattanGhost(pacmanlocal, ghostlocal)*4);			
-		value+= (avalia.closestDotEuclidean(pacmanlocal, dots)*0.5);
-		value+= (avalia.closestDotManhattan(pacmanlocal, dots)*1);
-
+		value+= (avalia.closestEuclideanGhost(pacmanlocal, ghostlocal)*10);
+		value+= (avalia.closestManhattanGhost(pacmanlocal, ghostlocal)*20);
+		value+= (avalia.averageEuclideanGhost(pacmanlocal, ghostlocal)*15);
+		value+= (avalia.averageManhattanGhost(pacmanlocal, ghostlocal)*5);   
+		value+= (avalia.numberDots(dots)*5);
+		value+= (avalia.secondEuclideanGhost(pacmanlocal, ghostlocal)*10);
+		value+= (avalia.secondManhattanGhost(pacmanlocal, ghostlocal)*15);
+		value+= (avalia.thirdEuclideanGhost(pacmanlocal, ghostlocal)*7);
+		value+= (avalia.thirdManhattanGhost(pacmanlocal, ghostlocal)*3);	
+		value+= (avalia.averageEuclideanDot(pacmanlocal, dots)*5);
+		value+= (avalia.averageManhattanDot(pacmanlocal, dots)*0);
+		value+= (avalia.closestDotEuclidean(pacmanlocal, dots)*0);
+		value+= (avalia.closestDotManhattan(pacmanlocal, dots)*5);
+		System.out.println("\n"+value);
 		return value;
 	}
 
