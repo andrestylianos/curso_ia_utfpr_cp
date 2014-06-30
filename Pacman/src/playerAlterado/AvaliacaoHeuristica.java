@@ -1,4 +1,4 @@
-package player;
+package playerAlterado;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,32 +14,32 @@ import pacman.State;
 
 
 public class AvaliacaoHeuristica {
+    
+    static double maxManhattanDistance = Game.xDim+Game.yDim;
+    static double maxEuclideanDistance = Math.sqrt(Math.pow(Game.xDim, 2)+Math.pow(Game.yDim, 2));
 
-	static double maxdiseuc = Math.sqrt(Math.pow(Game.xDim,2)+Math.pow(Game.yDim, 2));
-	static double maxdismanh = Game.xDim+Game.yDim;
-	
 	// Calcula a distancia euclideana entre o pacman e o fantasma mais próximo.
 	// Quanto maior melhor
 	public double closestEuclideanGhost(Location pacManLocation, List<Location> ghostLocations){
 		double minDistance = Double.POSITIVE_INFINITY;
-		if(7<Location.euclideanDistanceToClosest(pacManLocation, ghostLocations)){
-			minDistance = 1*Location.euclideanDistanceToClosest(pacManLocation, ghostLocations);
+		if(15<Location.euclideanDistanceToClosest(pacManLocation, ghostLocations)){
+			minDistance = maxEuclideanDistance-Location.euclideanDistanceToClosest(pacManLocation, ghostLocations);
 		}else{
-			minDistance = 1*Location.euclideanDistanceToClosest(pacManLocation, ghostLocations);
+			minDistance = 0.1*(maxEuclideanDistance-Location.euclideanDistanceToClosest(pacManLocation, ghostLocations));
 		}
-		return (minDistance*10)/maxdiseuc;
+		return -minDistance;
 	}
 
 	// Calcula a distancia de manhattan entre o pacman e o fantasma mais próximo.
 	// Quanto maior melhor
 	public double closestManhattanGhost(Location pacManLocation, List<Location> ghostLocations){
 		double minDistance  = Double.POSITIVE_INFINITY;
-		if(5<Location.manhattanDistanceToClosest(pacManLocation, ghostLocations)){
-			minDistance = 1*Location.manhattanDistanceToClosest(pacManLocation, ghostLocations);
+		if(15<Location.manhattanDistanceToClosest(pacManLocation, ghostLocations)){
+                    minDistance = (maxManhattanDistance-Location.manhattanDistanceToClosest(pacManLocation, ghostLocations));
 		}else{
-			minDistance = 1*Location.manhattanDistanceToClosest(pacManLocation, ghostLocations);
-		}
-		return (minDistance*10)/maxdismanh;
+			minDistance = 0.1*maxManhattanDistance-Location.manhattanDistanceToClosest(pacManLocation, ghostLocations);
+                }
+		return -minDistance;
 	}
 
 	// Calcula a distancia euclidiana média entre o pacman e todos os fantasmas.
@@ -51,7 +51,7 @@ public class AvaliacaoHeuristica {
 			i++;
 		}
 		average = sum/i;
-		return (average*10)/maxdiseuc;
+		return average;
 	}
 
 	// Calcula a distancia de manhattan média entre o pacman e todos os fantasmas.
@@ -63,7 +63,7 @@ public class AvaliacaoHeuristica {
 			i++;
 		}
 		average = sum/i;
-		return (average*10)/maxdismanh;
+		return average;
 	}
 
 	// Varia o peso atribuido para a heuristica da distancia euclideana entre o pacman e o segundo fantasma mais próximo
@@ -72,12 +72,12 @@ public class AvaliacaoHeuristica {
 		double value;
 		double secondClosest = getSecondClosestEuclDis(pacManLocation,
 				ghostLocations);
-		if(secondClosest<7){
-			value=1*secondClosest;
+		if(secondClosest<15){
+			value=maxEuclideanDistance-secondClosest;
 		}else{
-			value=1*secondClosest;
+			value=0.01*(maxEuclideanDistance-secondClosest);
 		}
-		return (value*10)/maxdiseuc;
+		return -value;
 	}
 
 	// Calcula a distancia euclideana entre o pacman e o segundo fantasma mais próximo.
@@ -104,12 +104,12 @@ public class AvaliacaoHeuristica {
 		double value;
 		double thirdClosest = getThirdClosestEuclDis(pacManLocation,
 				ghostLocations);
-		if(thirdClosest<7){
-			value=7*thirdClosest;
+		if(thirdClosest<20){
+			value=(maxEuclideanDistance-thirdClosest);
 		}else{
-			value=1*thirdClosest;
+			value=0.01*(maxEuclideanDistance-thirdClosest);
 		}
-		return (value*10)/maxdiseuc;
+		return -value;
 	}
 
 	// Calcula a distancia euclideana entre o pacman e o terceiro fantasma mais próximo.
@@ -136,12 +136,12 @@ public class AvaliacaoHeuristica {
 			double value;
 			double thirdClosest = getThirdClosestManhDis(pacManLocation,
 					ghostLocations);
-			if(thirdClosest<7){
-				value=1*thirdClosest;
+			if(thirdClosest<20){
+				value=maxManhattanDistance-thirdClosest;
 			}else{
-				value=1*thirdClosest;
+				value=0.01*(maxManhattanDistance-thirdClosest);
 			}
-			return (value*10)/maxdismanh;
+			return -value;
 		}
 
 		// Calcula a distancia euclideana entre o pacman e o terceiro fantasma mais próximo.
@@ -168,12 +168,12 @@ public class AvaliacaoHeuristica {
 		double value;
 		double secondClosest = getSecondClosestManhGhostDis(pacManLocation,
 				ghostLocations);
-		if(secondClosest<10){
-			value=7*secondClosest;
+		if(secondClosest<15){
+			value=maxManhattanDistance-secondClosest;
 		}else{
-			value=1*secondClosest;
+			value=0.01*(maxManhattanDistance-secondClosest);
 		}
-		return (value*10)/maxdismanh;
+		return -value;
 	}
 
 	// Calcula a distancia de manhattan entre o pacman e o segundo fantasma mais próximo.
@@ -196,8 +196,8 @@ public class AvaliacaoHeuristica {
 
 	// Contabiliza o numero de pontos restantes no tabuleiro.
 	// Quanto menor melhor
-	public double numberDots(LocationSet dot){
-		return -(dot.size()*10)/250;
+	public double numberDots(LocationSet dot,DFSPacManPlayer pacman){
+		return (pacman.numberDots-dot.size());
 	}
 
 	// Calcula a distancia euclideana media entre o pacman e os pontos.
@@ -209,7 +209,8 @@ public class AvaliacaoHeuristica {
 			i++;
 		}
 		average = sum/i;
-		return -(average*10)/maxdiseuc;
+                if(average<10) average=0;
+		return -average;
 	}
 
 	// Calcula a distancia de manhattan media entre o pacman e os pontos.
@@ -221,19 +222,28 @@ public class AvaliacaoHeuristica {
 			i++;
 		}
 		average = sum/i;
-		return -(average*10)/maxdismanh;
+                if(average<10) average=0;
+		return -average;
 	}
 
 	// Calcula a distancia euclideana entre o pacman e o ponto mais próximo.
 	// Quanto menor melhor
 	public double closestDotEuclidean(Location pacmanlocation, Collection<Location> dotlocations){
-		return -(Location.euclideanDistanceToClosest(pacmanlocation, dotlocations)*10)/maxdiseuc;
+		if(Location.euclideanDistanceToClosest(pacmanlocation, dotlocations)>5){
+            return -Location.euclideanDistanceToClosest(pacmanlocation, dotlocations);}
+                else{
+                    return -0.2*Location.euclideanDistanceToClosest(pacmanlocation, dotlocations);
+                }
 	}
 
 	// Calcula a distancia de manhattan entre o pacman e o ponto mais próximo.
 	// Quanto menor melhor
 	public double closestDotManhattan(Location pacmanlocation, Collection<Location> dotlocations){
-		return -(Location.manhattanDistanceToClosest(pacmanlocation, dotlocations)*10)/maxdismanh;
+            if(Location.manhattanDistanceToClosest(pacmanlocation, dotlocations)>5){
+		return -Location.manhattanDistanceToClosest(pacmanlocation, dotlocations);
+            }else{
+                return -0.2*Location.manhattanDistanceToClosest(pacmanlocation, dotlocations);
+            }
 	}
 
 	// Calcula a heuristica do ultimo estado caso o pacman continuasse em linha reta até encontrar uma parede.

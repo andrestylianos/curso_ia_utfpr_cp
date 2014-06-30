@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package equipe3Player;
+package equipe3Especialista;
 
 import java.util.Collections;
 import java.util.HashMap;

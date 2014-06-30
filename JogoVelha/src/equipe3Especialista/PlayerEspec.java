@@ -1,4 +1,4 @@
-package equipe3Player;
+package equipe3Especialista;
 
 import java.util.List;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package player;
+package playerAlterado;
 
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package player;
+package InvencivelBasic;
 
 import java.util.HashMap;
 
