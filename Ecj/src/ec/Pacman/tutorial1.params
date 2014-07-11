@@ -31,7 +31,7 @@ checkpoint		= false
 checkpoint-prefix	= ec
 checkpoint-modulo	= 1
 
-stat.file		= $/home/pantera/workspace/codigos_IA/Ecj/src/ec/Pacman/out.stat
+stat.file		= out.stat
 
 pop.subpops		= 1
 pop.subpop.0		= ec.Subpopulation
