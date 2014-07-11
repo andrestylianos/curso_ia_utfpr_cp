@@ -38,7 +38,7 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 			String individuo,stringheuristica;
 			individuo = ind.genotypeToStringForHumans();
 			stringheuristica = (individuo.charAt(0)+","+individuo.charAt(1)+","+individuo.charAt(2)+","+individuo.charAt(3)+","+individuo.charAt(4)+","+individuo.charAt(5)+","+individuo.charAt(6)+","+individuo.charAt(7)+","+individuo.charAt(8)+","+individuo.charAt(9)+","+individuo.charAt(10)+","+individuo.charAt(11)+","+individuo.charAt(12));
-			ProcessBuilder builder = new ProcessBuilder("java","-cp","workspace/EvoPacman/bin/", "pacman.Game", "-pacman", "player.DFSPacManPlayer", "-display", "none", "-ghosts", "ghosts.RandomGhostPlayer,ghosts.RandomGhostPlayer,ghosts.RandomGhostPlayer,ghosts.RandomGhostPlayer","-levels","10", "-heuristicas",stringheuristica);
+			ProcessBuilder builder = new ProcessBuilder("java","-cp","workspace/codigos_IA/PacmanEvo/bin/", "pacman.Game", "-pacman", "player.DFSPacManPlayer", "-display", "none", "-ghosts", "ghosts.RandomGhostPlayer,ghosts.RandomGhostPlayer,ghosts.RandomGhostPlayer,ghosts.RandomGhostPlayer","-levels","10", "-heuristicas",stringheuristica);
 			builder.redirectErrorStream(true);
 			builder.directory(new File("/home/pantera"));
 			pacman = builder.start();
