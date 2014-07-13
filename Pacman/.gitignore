@@ -1,0 +1,5 @@
+src/ghosts/
+src/pacman/
+src/player/SimplePacManPlayer.java
+src/player/package.html
+src/util/
