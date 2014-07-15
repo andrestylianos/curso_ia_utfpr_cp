@@ -33,17 +33,18 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 		individuo = ind.genotypeToStringForHumans();
 		valores = ToDecimalArray(individuo);
 		String ghostString = createGhostString(valores);
-		for(int i=0;i<3;i++){
-			int[] stats = null, heuristica = new int[13];		
+		for(int i=0;i<5;i++){
+			int[] stats = null;		
 			try {
-				stats = Game.init(10,"none","ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.StalkingGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer",valores);
+				stats = Game.init(30,"none",ghostString,valores);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			pontos=stats[0];
 			tempo=stats[2];
-			valorfitness+=((10*pontos)+(3*tempo))*valores.get("multiplier");
+			//System.out.println(valores.get("multiplier"));
+			valorfitness+=((3*pontos)+(tempo))*valores.get("multiplier");
 		}
 		BitVectorIndividual ind2 = (BitVectorIndividual)ind;
 
@@ -83,26 +84,37 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 	private String createGhostString(HashMap<String, Integer> values){
 		String ghostString = new String();
 		boolean stalkingexists = false;
-		int multiplier=1;
+		int multiplier=0;
 		for(int i=0;i<6;i++){
 			switch (values.get("G"+i)){
 			case 0:
 				break;
 			case 1:
-				ghostString+="ec.Pacman.ghosts.BasicGhostPlayer,";
-				multiplier=multiplier*2;
+				ghostString=ghostString+"ec.Pacman.ghosts.BasicGhostPlayer,";
+				multiplier=multiplier+6;
+				break;
 			case 2:
-				ghostString+="ec.Pacman.ghosts.RandomGhostPlayer,";
-				multiplier=multiplier*5;
+				ghostString=ghostString+"ec.Pacman.ghosts.RandomGhostPlayer,";
+				multiplier=multiplier+15;
+				break;
 			case 3:
-				ghostString+="ec.Pacman.ghosts.StalkingGhostPlayer,";
+				ghostString=ghostString+"ec.Pacman.ghosts.StalkingGhostPlayer,";
 				if(!stalkingexists){
-					multiplier=multiplier*10;
+					multiplier=multiplier+70;
 					stalkingexists=true;
 				}
+				break;
 			}
 		}
+		if((multiplier%6==0)||(multiplier==15)||(multiplier==70)){
+			ghostString="ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer,";
+			multiplier=60;
+		}
 		values.put("multiplier", multiplier);
-		return ghostString;
+		if(ghostString!="") {
+			return ghostString.substring(0, (ghostString.length())-1);
+		} else {
+			return null;
+		}
 	}
 }
