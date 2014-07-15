@@ -41,6 +41,8 @@ public interface PacManPlayer {
 	public void setH12(int h12);
 
 	public void setH13(int h13);
+	
+	public void setNivel(int profundidade);
 
 	Move chooseMove(Game game);
   

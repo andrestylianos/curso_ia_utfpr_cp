@@ -28,6 +28,10 @@ public class DFSPacManPlayer implements PacManPlayer, StateEvaluator {
 	public Move getLastmove() {
 		return lastmove;
 	}
+	
+	public void setNivel(int nivel){
+		DFSPacManPlayer.nivel = nivel;
+	}
 
 	@Override
 	public Move chooseMove(Game game){
