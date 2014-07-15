@@ -7,10 +7,7 @@
 
 package ec.Pacman;
 
-import java.io.File;
-import java.io.PrintWriter;
 import java.util.HashMap;
-
 import ec.*;
 import ec.simple.*;
 import ec.vector.*;
