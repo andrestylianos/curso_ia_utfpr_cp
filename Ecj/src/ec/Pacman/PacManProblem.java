@@ -13,6 +13,7 @@ import ec.simple.*;
 import ec.vector.*;
 import ec.Pacman.pacman.*;
 
+
 public class PacManProblem extends Problem implements SimpleProblemForm
 {
 
@@ -26,13 +27,12 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 		if (!(ind instanceof BitVectorIndividual))
 			state.output.fatal("Whoa!  It's not a BitVectorIndividual!!!",null);
 
-		int tempo=0;
-		int pontos=0;
-		int valorfitness=0;
+		int tempo=0, pontos=0, valorfitness=0; 
 		String individuo;
 		HashMap<String, Integer> valores;
 		individuo = ind.genotypeToStringForHumans();
 		valores = ToDecimalArray(individuo);
+		String ghostString = createGhostString(valores);
 		for(int i=0;i<3;i++){
 			int[] stats = null, heuristica = new int[13];		
 			try {
@@ -43,7 +43,7 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 			}
 			pontos=stats[0];
 			tempo=stats[2];
-			valorfitness+=((10*pontos)+(3*tempo));
+			valorfitness+=((10*pontos)+(3*tempo))*valores.get("multiplier");
 		}
 		BitVectorIndividual ind2 = (BitVectorIndividual)ind;
 
@@ -64,14 +64,45 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 			decimal= (Character.getNumericValue(ind.charAt(i))*8);
 			decimal+= (Character.getNumericValue(ind.charAt(i+1))*4);
 			decimal+= (Character.getNumericValue(ind.charAt(i+2))*2);
-			decimal+= (Character.getNumericValue(ind.charAt(i+3))*0);
+			decimal+= (Character.getNumericValue(ind.charAt(i+3))*1);
 			valuesmap.put(("h"+(i/4)), decimal);
 		}
 		decimal= (Character.getNumericValue(ind.charAt(52))*4);
 		decimal+= (Character.getNumericValue(ind.charAt(53))*2);
-		decimal+= (Character.getNumericValue(ind.charAt(54))*0);
+		decimal+= (Character.getNumericValue(ind.charAt(54))*1);
 		valuesmap.put("nivel", decimal);
+		for(int i=55;i<67;i+=2){
+			decimal= (Character.getNumericValue(ind.charAt(i))*2);
+			decimal+= (Character.getNumericValue(ind.charAt(i+1))*1);
+			valuesmap.put(("G"+((i-55)/2)), decimal);
+		}
 		return valuesmap;
 
+	}
+	
+	private String createGhostString(HashMap<String, Integer> values){
+		String ghostString = new String();
+		boolean stalkingexists = false;
+		int multiplier=1;
+		for(int i=0;i<6;i++){
+			switch (values.get("G"+i)){
+			case 0:
+				break;
+			case 1:
+				ghostString+="ec.Pacman.ghosts.BasicGhostPlayer,";
+				multiplier=multiplier*2;
+			case 2:
+				ghostString+="ec.Pacman.ghosts.RandomGhostPlayer,";
+				multiplier=multiplier*5;
+			case 3:
+				ghostString+="ec.Pacman.ghosts.StalkingGhostPlayer,";
+				if(!stalkingexists){
+					multiplier=multiplier*10;
+					stalkingexists=true;
+				}
+			}
+		}
+		values.put("multiplier", multiplier);
+		return ghostString;
 	}
 }

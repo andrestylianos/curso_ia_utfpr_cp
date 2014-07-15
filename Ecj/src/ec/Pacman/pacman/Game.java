@@ -877,7 +877,7 @@ public class Game {
     Display display = new TextDisplay();
     // make pacman player, default keyboard
     PacManPlayer pacMan = new ec.Pacman.player.DFSPacManPlayer();
-    if(valores.size()<15){
+    if(valores.size()<22){
         pacMan.setH1(valores.get("h0"));
         pacMan.setH2(valores.get("h1"));
         pacMan.setH3(valores.get("h2"));
