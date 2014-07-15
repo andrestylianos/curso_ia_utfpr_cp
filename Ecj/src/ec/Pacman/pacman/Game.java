@@ -870,7 +870,7 @@ public class Game {
    * @param args
    * @throws ClassNotFoundException
    */
-  public static int[] init(int levels, String displayName, String ghostTypes, int[] heuristicas) throws ClassNotFoundException {
+  public static int[] init(int levels, String displayName, String ghostTypes, int[] heuristicas, int profundidade) throws ClassNotFoundException {
     // choose display
     // text is default
     Display display = new TextDisplay();
@@ -890,8 +890,12 @@ public class Game {
         pacMan.setH11(heuristicas[10]);
         pacMan.setH12(heuristicas[11]);
         pacMan.setH13(heuristicas[12]);
-        
+    }else{
+    	System.err.println("Numero errado de heuristicas");
+    	System.exit(0);
     }
+    int nivel = profundidade!=0 ? profundidade : 1;
+    pacMan.setNivel(nivel);
 
     int maxLevel = Integer.MAX_VALUE;
     if (levels!=0) {
