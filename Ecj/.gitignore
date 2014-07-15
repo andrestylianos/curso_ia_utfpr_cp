@@ -41,6 +41,7 @@ src/ec/pso/
 src/ec/rule/
 src/ec/select/
 src/ec/simple/
+!src/ec/simple/SimpleStatistics.java
 src/ec/spatial/
 src/ec/steadystate/
 src/ec/util/

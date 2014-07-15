@@ -7,6 +7,10 @@
 
 package ec.Pacman;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.HashMap;
+
 import ec.*;
 import ec.simple.*;
 import ec.vector.*;
@@ -28,16 +32,14 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 		int tempo=0;
 		int pontos=0;
 		int valorfitness=0;
+		String individuo;
+		HashMap<String, Integer> valores;
+		individuo = ind.genotypeToStringForHumans();
+		valores = ToDecimalArray(individuo);
 		for(int i=0;i<3;i++){
-			int[] stats = null, heuristica = new int[13];
-			String individuo,stringheuristica;
-			individuo = ind.genotypeToStringForHumans();
-			stringheuristica = (individuo.charAt(0)+","+individuo.charAt(1)+","+individuo.charAt(2)+","+individuo.charAt(3)+","+individuo.charAt(4)+","+individuo.charAt(5)+","+individuo.charAt(6)+","+individuo.charAt(7)+","+individuo.charAt(8)+","+individuo.charAt(9)+","+individuo.charAt(10)+","+individuo.charAt(11)+","+individuo.charAt(12));
-			for(int j=0;j<individuo.length();j++){
-				heuristica[i]= Character.getNumericValue(stringheuristica.charAt(i));
-			}
+			int[] stats = null, heuristica = new int[13];		
 			try {
-				stats = Game.init(10,"none","ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.StalkingGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer",heuristica,6);
+				stats = Game.init(10,"none","ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.StalkingGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer,ec.Pacman.ghosts.RandomGhostPlayer",valores);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -56,5 +58,23 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 				///... is the individual ideal?  Indicate here...
 				valorfitness == Integer.MAX_VALUE);
 		ind2.evaluated = true;
+	}
+
+	static public HashMap<String, Integer> ToDecimalArray(String ind){
+		int decimal=0;
+		HashMap<String, Integer> valuesmap=new HashMap<>();
+		for(int i=0;i<52;i+=4){
+			decimal= (Character.getNumericValue(ind.charAt(i))*8);
+			decimal+= (Character.getNumericValue(ind.charAt(i+1))*4);
+			decimal+= (Character.getNumericValue(ind.charAt(i+2))*2);
+			decimal+= (Character.getNumericValue(ind.charAt(i+3))*0);
+			valuesmap.put(("h"+(i/4)), decimal);
+		}
+		decimal= (Character.getNumericValue(ind.charAt(52))*4);
+		decimal+= (Character.getNumericValue(ind.charAt(53))*2);
+		decimal+= (Character.getNumericValue(ind.charAt(54))*0);
+		valuesmap.put("nivel", decimal);
+		return valuesmap;
+
 	}
 }
