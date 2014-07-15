@@ -8,6 +8,7 @@ import ec.Pacman.ghosts.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -870,32 +871,32 @@ public class Game {
    * @param args
    * @throws ClassNotFoundException
    */
-  public static int[] init(int levels, String displayName, String ghostTypes, int[] heuristicas, int profundidade) throws ClassNotFoundException {
+  public static int[] init(int levels, String displayName, String ghostTypes, HashMap<String, Integer> valores) throws ClassNotFoundException {
     // choose display
     // text is default
     Display display = new TextDisplay();
     // make pacman player, default keyboard
     PacManPlayer pacMan = new ec.Pacman.player.DFSPacManPlayer();
-    if(heuristicas.length==13){
-        pacMan.setH1(heuristicas[0]);
-        pacMan.setH2(heuristicas[1]);
-        pacMan.setH3(heuristicas[2]);
-        pacMan.setH4(heuristicas[3]);
-        pacMan.setH5(heuristicas[4]);
-        pacMan.setH6(heuristicas[5]);
-        pacMan.setH7(heuristicas[6]);
-        pacMan.setH8(heuristicas[7]);
-        pacMan.setH9(heuristicas[8]);
-        pacMan.setH10(heuristicas[9]);
-        pacMan.setH11(heuristicas[10]);
-        pacMan.setH12(heuristicas[11]);
-        pacMan.setH13(heuristicas[12]);
+    if(valores.size()<15){
+        pacMan.setH1(valores.get("h0"));
+        pacMan.setH2(valores.get("h1"));
+        pacMan.setH3(valores.get("h2"));
+        pacMan.setH4(valores.get("h3"));
+        pacMan.setH5(valores.get("h4"));
+        pacMan.setH6(valores.get("h5"));
+        pacMan.setH7(valores.get("h6"));
+        pacMan.setH8(valores.get("h7"));
+        pacMan.setH9(valores.get("h8"));
+        pacMan.setH10(valores.get("h9"));
+        pacMan.setH11(valores.get("h10"));
+        pacMan.setH12(valores.get("h11"));
+        pacMan.setH13(valores.get("h12"));
+    int nivel = valores.get("nivel")!=0 ? valores.get("nivel") : 1;
+    pacMan.setNivel(nivel);
     }else{
-    	System.err.println("Numero errado de heuristicas");
+    	System.out.println("Numero errado de valores:   "+valores.size());
     	System.exit(0);
     }
-    int nivel = profundidade!=0 ? profundidade : 1;
-    pacMan.setNivel(nivel);
 
     int maxLevel = Integer.MAX_VALUE;
     if (levels!=0) {
