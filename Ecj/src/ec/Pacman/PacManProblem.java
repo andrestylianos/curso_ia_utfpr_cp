@@ -33,7 +33,7 @@ public class PacManProblem extends Problem implements SimpleProblemForm
 		individuo = ind.genotypeToStringForHumans();
 		valores = ToDecimalArray(individuo);
 		String ghostString = createGhostString(valores);
-		for(int i=0;i<5;i++){
+		for(int i=0;i<3;i++){
 			int[] stats = null;		
 			try {
 				stats = Game.init(30,"none",ghostString,valores);

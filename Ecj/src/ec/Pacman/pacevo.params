@@ -2,8 +2,6 @@
 # Licensed under the Academic Free License version 3.0
 # See the file "LICENSE" for more information
 
-# The parameters that were laid out in Tutorial 1 (see the documentation)
-
 breedthreads	= 8
 evalthreads	= 8
 seed.0		= time
@@ -25,7 +23,7 @@ eval		= ec.simple.SimpleEvaluator
 stat		= ec.simple.SimpleStatistics
 exch		= ec.simple.SimpleExchanger
 
-generations		= 2000
+generations		= 10
 quit-on-run-complete	= true
 checkpoint		= false
 checkpoint-prefix	= ec
